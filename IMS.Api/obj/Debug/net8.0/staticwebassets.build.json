@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+  "Hash": "GB720OUQZfAO3qx5w8gQxBJA+yQ5XiwUKpgxc/xM09g=",
+  "Source": "IMS.Api",
+  "BasePath": "_content/IMS.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "IMS.Api\\wwwroot",
+      "Source": "IMS.Api",
+      "ContentRoot": "C:\\Users\\taher\\OneDrive\\Desktop\\internship-frontend-training-workflow-updated\\internship-backend\\InternshipManagementSystem.Backend\\IMS.Api\\wwwroot\\",
+      "BasePath": "_content/IMS.Api",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\taher\\OneDrive\\Desktop\\internship-frontend-training-workflow-updated\\internship-backend\\InternshipManagementSystem.Backend\\IMS.Api\\wwwroot\\uploads\\student-documents\\18\\aa1ceb99656f407fb2be4baef2835c64.docx",
+      "SourceId": "IMS.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\taher\\OneDrive\\Desktop\\internship-frontend-training-workflow-updated\\internship-backend\\InternshipManagementSystem.Backend\\IMS.Api\\wwwroot\\",
+      "BasePath": "_content/IMS.Api",
+      "RelativePath": "uploads/student-documents/18/aa1ceb99656f407fb2be4baef2835c64.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\student-documents\\18\\aa1ceb99656f407fb2be4baef2835c64.docx"
+    },
+    {
+      "Identity": "C:\\Users\\taher\\OneDrive\\Desktop\\internship-frontend-training-workflow-updated\\internship-backend\\InternshipManagementSystem.Backend\\IMS.Api\\wwwroot\\uploads\\student-documents\\18\\b0dbee800b4b46fca1b1ba0fe02ae080.docx",
+      "SourceId": "IMS.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\taher\\OneDrive\\Desktop\\internship-frontend-training-workflow-updated\\internship-backend\\InternshipManagementSystem.Backend\\IMS.Api\\wwwroot\\",
+      "BasePath": "_content/IMS.Api",
+      "RelativePath": "uploads/student-documents/18/b0dbee800b4b46fca1b1ba0fe02ae080.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\student-documents\\18\\b0dbee800b4b46fca1b1ba0fe02ae080.docx"
+    }
+  ]
+}

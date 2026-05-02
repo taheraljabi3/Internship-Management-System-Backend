@@ -309,6 +309,85 @@ namespace IMS.Api.Controllers
                 user = currentUser
             });
         }
+[Authorize]
+[HttpPost("change-password")]
+public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+{
+    var userId = User.GetUserId();
+
+    var currentPassword = request.currentPassword?.Trim();
+    var newPassword = request.newPassword?.Trim();
+
+    if (string.IsNullOrWhiteSpace(currentPassword))
+        return BadRequest(new { message = "Current password is required." });
+
+    if (string.IsNullOrWhiteSpace(newPassword))
+        return BadRequest(new { message = "New password is required." });
+
+    if (newPassword.Length < 8)
+        return BadRequest(new { message = "New password must be at least 8 characters." });
+
+    var rows = await _context.Database.SqlQueryRaw<ChangePasswordUserRow>(
+        """
+        SELECT
+            u.id,
+            u.email,
+            u.username,
+            u.password_hash
+        FROM users u
+        WHERE u.id = @userId
+        LIMIT 1
+        """,
+        new Npgsql.NpgsqlParameter("userId", userId))
+        .ToListAsync();
+
+    var user = rows.FirstOrDefault();
+
+    if (user == null)
+        return NotFound(new { message = "User not found." });
+
+    if (string.IsNullOrWhiteSpace(user.password_hash))
+        return BadRequest(new { message = "Password is not set for this user." });
+
+    bool isCurrentPasswordValid;
+
+    try
+    {
+        isCurrentPasswordValid = _passwordService.Verify(currentPassword, user.password_hash);
+    }
+    catch
+    {
+        return BadRequest(new { message = "Stored password hash is invalid." });
+    }
+
+    if (!isCurrentPasswordValid)
+    {
+        return BadRequest(new
+        {
+            message = "Current password is incorrect.",
+            debug = new
+            {
+                userId = user.id,
+                email = user.email,
+                username = user.username,
+                hashPrefix = user.password_hash.Length >= 7
+                    ? user.password_hash.Substring(0, 7)
+                    : user.password_hash
+            }
+        });
+    }
+
+    var newPasswordHash = _passwordService.Hash(newPassword);
+
+    await _context.Database.ExecuteSqlInterpolatedAsync($"""
+        UPDATE users
+        SET password_hash = {newPasswordHash},
+            updated_at = NOW()
+        WHERE id = {userId}
+        """);
+
+    return Ok(new { message = "Password updated successfully." });
+}
 
         [Authorize]
         [HttpPost("logout")]
@@ -342,6 +421,21 @@ namespace IMS.Api.Controllers
             public string status { get; set; } = string.Empty;
             public string? role { get; set; }
         }
+
+        public class ChangePasswordRequest
+        {
+            public string? currentPassword { get; set; }
+            public string? newPassword { get; set; }
+        }
+
+        private class ChangePasswordUserRow
+        {
+            public long id { get; set; }
+            public string email { get; set; } = string.Empty;
+            public string? username { get; set; }
+            public string? password_hash { get; set; }
+        }
+
 
         private class MeUserRow
         {

@@ -25,39 +25,60 @@ namespace IMS.Api.Controllers
         // =========================================================
         // 4. Notifications
         // =========================================================
-        [HttpGet("notifications")]
-        public async Task<IActionResult> GetNotifications(
-            [FromQuery] string? q = null,
-            [FromQuery] string? type = null,
-            [FromQuery] string? status = null)
-        {
-            var rows = await _context.Database.SqlQueryRaw<AdminNotificationDto>(
-                """
-                SELECT
-                    n.id,
-                    n.title,
-                    n.message,
-                    n.recipient_user_id,
-                    u.full_name AS recipient_name,
-                    n.recipient_email,
-                    n.type,
-                    n.status,
-                    n.created_at,
-                    n.read_at
-                FROM admin_notifications n
-                LEFT JOIN users u ON u.id = n.recipient_user_id
-                WHERE (@q IS NULL OR (n.title ILIKE @q OR COALESCE(n.message, '') ILIKE @q OR COALESCE(n.recipient_email, '') ILIKE @q))
-                  AND (@type IS NULL OR n.type = @type)
-                  AND (@status IS NULL OR n.status = @status)
-                ORDER BY n.created_at DESC, n.id DESC
-                """,
-                new NpgsqlParameter("q", NormalizeSearch(q)),
-                new NpgsqlParameter("type", NormalizeFilter(type)),
-                new NpgsqlParameter("status", NormalizeFilter(status)))
-                .ToListAsync();
 
-            return Ok(rows);
-        }
+[HttpGet("notifications")]
+public async Task<IActionResult> GetNotifications(
+    [FromQuery] string? q = null,
+    [FromQuery] string? type = null,
+    [FromQuery] string? status = null)
+{
+    var searchValue = string.IsNullOrWhiteSpace(q) ? "" : $"%{q.Trim()}%";
+    var typeValue = string.IsNullOrWhiteSpace(type) || type.Equals("All", StringComparison.OrdinalIgnoreCase)
+        ? ""
+        : type.Trim();
+
+    var statusValue = string.IsNullOrWhiteSpace(status) || status.Equals("All", StringComparison.OrdinalIgnoreCase)
+        ? ""
+        : status.Trim();
+
+    var rows = await _context.Database.SqlQueryRaw<AdminNotificationDto>(
+        """
+        SELECT
+            n.id,
+            n.title,
+            n.message,
+            n.recipient_user_id,
+            u.full_name AS recipient_name,
+            n.recipient_email,
+            n.type,
+            n.status,
+            n.created_at,
+            n.read_at
+        FROM admin_notifications n
+        LEFT JOIN users u ON u.id = n.recipient_user_id
+        WHERE (
+            @q = ''
+            OR n.title ILIKE @q
+            OR COALESCE(n.message, '') ILIKE @q
+            OR COALESCE(n.recipient_email, '') ILIKE @q
+        )
+        AND (
+            @type = ''
+            OR n.type = @type
+        )
+        AND (
+            @status = ''
+            OR n.status = @status
+        )
+        ORDER BY n.created_at DESC, n.id DESC
+        """,
+        new NpgsqlParameter("q", NpgsqlTypes.NpgsqlDbType.Text) { Value = searchValue },
+        new NpgsqlParameter("type", NpgsqlTypes.NpgsqlDbType.Text) { Value = typeValue },
+        new NpgsqlParameter("status", NpgsqlTypes.NpgsqlDbType.Text) { Value = statusValue })
+        .ToListAsync();
+
+    return Ok(rows);
+}
 
         [HttpPost("notifications")]
         public async Task<IActionResult> CreateNotification(CreateAdminNotificationRequest request)

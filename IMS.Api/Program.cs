@@ -5,7 +5,7 @@ using IMS.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
+using IMS.Api.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
@@ -24,12 +24,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<PasswordService>();
 builder.Services.AddScoped<JwtTokenService>();
-
-builder.Services.Configure<EmailSettings>(
-    builder.Configuration.GetSection("Email")
-);
-
-builder.Services.AddScoped<IEmailSender, BrevoSmtpEmailSender>();
 
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 var jwtIssuer = builder.Configuration["Jwt:Issuer"]!;
@@ -70,24 +64,27 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("Email")
+);
+
+builder.Services.AddScoped<IEmailSender, BrevoSmtpEmailSender>();
+
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI(options =>
+if (app.Environment.IsDevelopment())
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "IMS API v1");
-    options.RoutePrefix = "swagger";
-});
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-app.MapGet("/", () => Results.Redirect("/swagger"));
+app.UseHttpsRedirection();
 
 app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseStaticFiles();
-
 app.MapControllers();
 
 app.Run();

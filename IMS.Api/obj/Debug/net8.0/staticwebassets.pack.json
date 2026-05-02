@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\taher\\OneDrive\\Desktop\\internship-frontend-training-workflow-updated\\internship-backend\\InternshipManagementSystem.Backend\\IMS.Api\\wwwroot\\uploads\\student-documents\\18\\aa1ceb99656f407fb2be4baef2835c64.docx",
+      "PackagePath": "staticwebassets\\uploads\\student-documents\\18\\aa1ceb99656f407fb2be4baef2835c64.docx"
+    },
+    {
+      "Id": "C:\\Users\\taher\\OneDrive\\Desktop\\internship-frontend-training-workflow-updated\\internship-backend\\InternshipManagementSystem.Backend\\IMS.Api\\wwwroot\\uploads\\student-documents\\18\\b0dbee800b4b46fca1b1ba0fe02ae080.docx",
+      "PackagePath": "staticwebassets\\uploads\\student-documents\\18\\b0dbee800b4b46fca1b1ba0fe02ae080.docx"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.IMS.Api.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.IMS.Api.props",
+      "PackagePath": "build\\IMS.Api.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.IMS.Api.props",
+      "PackagePath": "buildMultiTargeting\\IMS.Api.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.IMS.Api.props",
+      "PackagePath": "buildTransitive\\IMS.Api.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
